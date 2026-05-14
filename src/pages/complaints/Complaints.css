@@ -1,0 +1,85 @@
+.complaints__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 16px;
+}
+
+.complaint-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.4s ease;
+}
+
+.complaint-card--high   { border-top: 3px solid var(--danger); }
+.complaint-card--medium { border-top: 3px solid var(--warning); }
+.complaint-card--low    { border-top: 3px solid var(--success); }
+
+.complaint-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.complaint-card__id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+}
+
+.complaint-card__type {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.complaint-card__desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.complaint-card__parties {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.complaint-party {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.complaint-party--right { margin-left: auto; }
+
+.complaint-party__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.complaint-party__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.complaint-card__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

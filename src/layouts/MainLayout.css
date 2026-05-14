@@ -1,0 +1,27 @@
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-layout__content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.25s ease;
+  min-width: 0;
+}
+
+.main-layout__content--collapsed {
+  margin-left: var(--sidebar-collapsed);
+}
+
+.main-layout__main {
+  margin-top: var(--navbar-height);
+  padding: 24px;
+  min-height: calc(100vh - var(--navbar-height));
+}
+
+@media (max-width: 768px) {
+  .main-layout__content {
+    margin-left: 0 !important;
+  }
+}
