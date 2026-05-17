@@ -5,8 +5,10 @@ import Dashboard      from '../pages/dashboard/Dashboard';
 import Providers      from '../pages/providers/Providers';
 import Verification   from '../pages/verification/Verification';
 import Bookings       from '../pages/bookings/Bookings';
-import Complaints     from '../pages/complaints/Complaints';
+import ProviderProfile from '../pages/admin/ProviderProfile/ProviderProfile';
+import ComplaintsAndRatings from '../pages/ComplaintsAndRatings';
 import Analytics      from '../pages/analytics/Analytics';
+import Categories     from '../pages/admin/Categories/Categories';
 import Notifications  from '../pages/notifications/Notifications';
 import Blocked        from '../pages/blocked/Blocked';
 import Settings       from '../pages/settings/Settings';
@@ -17,15 +19,13 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index            element={<Dashboard />} />
-        <Route path="users"     element={<PlaceholderPage title="Users" />} />
         <Route path="providers" element={<Providers />} />
+        <Route path="reviews/:id" element={<ProviderProfile />} />
         <Route path="verification" element={<Verification />} />
-        <Route path="pending"   element={<PlaceholderPage title="Pending Approvals" />} />
-        <Route path="tracking"  element={<PlaceholderPage title="Live Tracking" />} />
         <Route path="bookings"  element={<Bookings />} />
-        <Route path="complaints" element={<Complaints />} />
-        <Route path="reviews"   element={<PlaceholderPage title="Reviews & Ratings" />} />
-        <Route path="categories" element={<PlaceholderPage title="Categories" />} />
+        <Route path="complaints" element={<ComplaintsAndRatings />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="admin/categories" element={<Categories />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="blocked"   element={<Blocked />} />

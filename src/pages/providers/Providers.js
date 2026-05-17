@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Eye, ShieldOff, CheckCircle, XCircle } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import SearchBar from '../../components/common/SearchBar';
@@ -16,7 +17,7 @@ const statusMap = {
 export default function Providers() {
   const [search, setSearch]     = useState('');
   const [filter, setFilter]     = useState('all');
-  const [selected, setSelected] = useState(null);
+  const navigate = useNavigate();
 
   const filtered = mockProviders.filter(p => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -68,7 +69,7 @@ export default function Providers() {
             </thead>
             <tbody>
               {filtered.map(p => (
-                <tr key={p.id}>
+                <tr key={p.id} onClick={() => navigate(`/reviews/${p.id}`)} style={{ cursor: 'pointer' }}>
                   <td>
                     <div className="provider-name">
                       <div className="provider-avatar">{p.name.charAt(0)}</div>
@@ -98,21 +99,21 @@ export default function Providers() {
                   <td><Badge label={p.status} type={statusMap[p.status]} /></td>
                   <td>
                     <div className="table-actions">
-                      <button className="icon-btn icon-btn--info" title="View" onClick={() => setSelected(p)}>
+                      <button className="icon-btn icon-btn--info" title="View" onClick={(e) => { e.stopPropagation(); navigate(`/reviews/${p.id}`); }}>
                         <Eye size={15} />
                       </button>
                       {p.status !== 'approved' && p.status !== 'blocked' && (
-                        <button className="icon-btn icon-btn--success" title="Approve">
+                        <button className="icon-btn icon-btn--success" title="Approve" onClick={(e) => e.stopPropagation()}>
                           <CheckCircle size={15} />
                         </button>
                       )}
                       {p.status !== 'blocked' && (
-                        <button className="icon-btn icon-btn--danger" title="Block">
+                        <button className="icon-btn icon-btn--danger" title="Block" onClick={(e) => e.stopPropagation()}>
                           <ShieldOff size={15} />
                         </button>
                       )}
                       {p.status === 'blocked' && (
-                        <button className="icon-btn icon-btn--success" title="Unblock">
+                        <button className="icon-btn icon-btn--success" title="Unblock" onClick={(e) => e.stopPropagation()}>
                           <XCircle size={15} />
                         </button>
                       )}
@@ -125,29 +126,7 @@ export default function Providers() {
         )}
       </div>
 
-      {/* Provider Detail Modal */}
-      {selected && (
-        <div className="modal-overlay" onClick={() => setSelected(null)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div className="modal__header">
-              <h2 className="modal__title">{selected.name}</h2>
-              <button className="modal__close" onClick={() => setSelected(null)}>✕</button>
-            </div>
-            <div className="modal__body">
-              <div className="modal-grid">
-                <div className="modal-field"><label>Type</label><p>{selected.type}</p></div>
-                <div className="modal-field"><label>City</label><p>{selected.city}</p></div>
-                <div className="modal-field"><label>Phone</label><p>{selected.phone}</p></div>
-                <div className="modal-field"><label>Status</label><Badge label={selected.status} type={statusMap[selected.status]} /></div>
-                <div className="modal-field"><label>Quiz Score</label><p>{selected.quizScore ?? 'Not attempted'}%</p></div>
-                <div className="modal-field"><label>Attempts</label><p>{selected.attempts} of 3</p></div>
-                <div className="modal-field"><label>Rating</label><p>{selected.rating ?? 'No ratings yet'}</p></div>
-                <div className="modal-field"><label>Completed Jobs</label><p>{selected.completedJobs}</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal Removed */}
     </div>
   );
 }

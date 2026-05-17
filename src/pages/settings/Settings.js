@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
-import { Save, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Save, Eye, EyeOff, Moon, Globe, RefreshCw } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import './Settings.css';
 
 export default function Settings() {
   const [showPassword, setShowPassword] = useState(false);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
+  const [language, setLanguage] = useState('en');
+  const [autoRefresh, setAutoRefresh] = useState(true);
   const [notifications, setNotifications] = useState({
     newProvider: true,
     complaint: true,
     bookings: false,
     blocked: true,
   });
+
+  const handleDarkModeToggle = (e) => {
+    const enabled = e.target.checked;
+    setDarkMode(enabled);
+    localStorage.setItem('darkMode', enabled ? 'true' : 'false');
+    if (enabled) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  };
 
   return (
     <div className="settings animate-fade">
@@ -76,6 +90,61 @@ export default function Settings() {
               </div>
             </div>
             <button className="btn btn--primary"><Save size={14} /> Update Password</button>
+          </div>
+        </div>
+
+        {/* Platform & Theme Settings */}
+        <div className="settings-card">
+          <h3 className="settings-card__title">Platform & Appearance</h3>
+          <div className="settings-card__body">
+            {/* Dark Mode toggle */}
+            <div className="settings-toggle-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Moon size={16} />
+                <span>Dark Theme</span>
+              </div>
+              <label className="toggle">
+                <input
+                  type="checkbox"
+                  checked={darkMode}
+                  onChange={handleDarkModeToggle}
+                />
+                <span className="toggle__slider" />
+              </label>
+            </div>
+
+            {/* Language Selection */}
+            <div className="settings-toggle-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Globe size={16} />
+                <span>Default Language</span>
+              </div>
+              <select 
+                className="form-input" 
+                value={language} 
+                onChange={(e) => setLanguage(e.target.value)}
+                style={{ height: '32px', padding: '0 8px', width: '120px' }}
+              >
+                <option value="en">English</option>
+                <option value="ur">Urdu (اردو)</option>
+              </select>
+            </div>
+
+            {/* Auto Refresh */}
+            <div className="settings-toggle-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <RefreshCw size={16} />
+                <span>Auto Refresh Dashboard</span>
+              </div>
+              <label className="toggle">
+                <input
+                  type="checkbox"
+                  checked={autoRefresh}
+                  onChange={(e) => setAutoRefresh(e.target.checked)}
+                />
+                <span className="toggle__slider" />
+              </label>
+            </div>
           </div>
         </div>
 

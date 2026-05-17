@@ -10,14 +10,10 @@ import './Sidebar.css';
 
 const menuItems = [
   { label: 'Dashboard',         icon: LayoutDashboard, path: '/' },
-  { label: 'Users',             icon: Users,            path: '/users' },
   { label: 'Service Providers', icon: Briefcase,        path: '/providers' },
   { label: 'Verification Tests',icon: ClipboardCheck,   path: '/verification' },
-  { label: 'Pending Approvals', icon: Clock,            path: '/pending' },
-  { label: 'Live Tracking',     icon: MapPin,            path: '/tracking' },
   { label: 'Active Bookings',   icon: BookOpen,          path: '/bookings' },
   { label: 'Complaints',        icon: AlertCircle,       path: '/complaints' },
-  { label: 'Reviews & Ratings', icon: Star,              path: '/reviews' },
   { label: 'Categories',        icon: Tag,               path: '/categories' },
   { label: 'Notifications',     icon: Bell,              path: '/notifications' },
   { label: 'Reports & Analytics',icon: BarChart2,        path: '/analytics' },
