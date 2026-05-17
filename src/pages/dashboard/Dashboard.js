@@ -50,13 +50,23 @@ export default function Dashboard() {
           </div>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={weeklyBookings} barGap={4}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="completed" name="Completed" fill="#2563EB" radius={[4,4,0,0]} />
-              <Bar dataKey="cancelled" name="Cancelled"  fill="#EF4444" radius={[4,4,0,0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="day" tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'var(--card-bg)', 
+                  borderColor: 'var(--border)', 
+                  borderRadius: '12px', 
+                  boxShadow: 'var(--shadow-lg)',
+                  color: 'var(--text-primary)'
+                }}
+                itemStyle={{ color: 'var(--text-primary)' }}
+                labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
+              />
+              <Legend wrapperStyle={{ paddingTop: '10px' }} />
+              <Bar dataKey="completed" name="Completed" fill="var(--primary)" radius={[4,4,0,0]} />
+              <Bar dataKey="cancelled" name="Cancelled"  fill="var(--danger)" radius={[4,4,0,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -69,13 +79,23 @@ export default function Dashboard() {
           </div>
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={providerGrowth}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="electricians" name="Electricians" stroke="#2563EB" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="plumbers"     name="Plumbers"     stroke="#06B6D4" strokeWidth={2} dot={{ r: 4 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'var(--card-bg)', 
+                  borderColor: 'var(--border)', 
+                  borderRadius: '12px', 
+                  boxShadow: 'var(--shadow-lg)',
+                  color: 'var(--text-primary)'
+                }}
+                itemStyle={{ color: 'var(--text-primary)' }}
+                labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
+              />
+              <Legend wrapperStyle={{ paddingTop: '10px' }} />
+              <Line type="monotone" dataKey="electricians" name="Electricians" stroke="var(--primary)" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, stroke: 'var(--card-bg)', fill: 'var(--primary)' }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="plumbers"     name="Plumbers"     stroke="var(--cyan)" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, stroke: 'var(--card-bg)', fill: 'var(--cyan)' }} activeDot={{ r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -93,10 +113,18 @@ export default function Dashboard() {
               <PieChart>
                 <Pie data={serviceCategories} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name} ${value}%`}>
                   {serviceCategories.map((_, i) => (
-                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                    <Cell key={i} fill={i === 0 ? 'var(--primary)' : 'var(--cyan)'} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'var(--card-bg)', 
+                    borderColor: 'var(--border)', 
+                    borderRadius: '12px', 
+                    boxShadow: 'var(--shadow-lg)',
+                    color: 'var(--text-primary)'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -109,13 +137,23 @@ export default function Dashboard() {
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={complaintTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="complaints" name="Submitted" fill="#EF4444" radius={[4,4,0,0]} />
-              <Bar dataKey="resolved"   name="Resolved"  fill="#10B981" radius={[4,4,0,0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'var(--card-bg)', 
+                  borderColor: 'var(--border)', 
+                  borderRadius: '12px', 
+                  boxShadow: 'var(--shadow-lg)',
+                  color: 'var(--text-primary)'
+                }}
+                itemStyle={{ color: 'var(--text-primary)' }}
+                labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
+              />
+              <Legend wrapperStyle={{ paddingTop: '10px' }} />
+              <Bar dataKey="complaints" name="Submitted" fill="var(--danger)" radius={[4,4,0,0]} />
+              <Bar dataKey="resolved"   name="Resolved"  fill="var(--success)" radius={[4,4,0,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
