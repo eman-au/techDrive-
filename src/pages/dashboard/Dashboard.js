@@ -152,8 +152,8 @@ export default function Dashboard() {
                 labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
               />
               <Legend wrapperStyle={{ paddingTop: '10px' }} />
-              <Bar dataKey="complaints" name="Submitted" fill="var(--danger)" radius={[4,4,0,0]} />
-              <Bar dataKey="resolved"   name="Resolved"  fill="var(--success)" radius={[4,4,0,0]} />
+              <Bar dataKey="complaints" name="Submitted" fill="#8B5CF6" radius={[4,4,0,0]} />
+              <Bar dataKey="resolved"   name="Resolved"  fill="#4F46E5" radius={[4,4,0,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

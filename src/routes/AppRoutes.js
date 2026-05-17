@@ -12,6 +12,7 @@ import Categories     from '../pages/admin/Categories/Categories';
 import Notifications  from '../pages/notifications/Notifications';
 import Blocked        from '../pages/blocked/Blocked';
 import Settings       from '../pages/settings/Settings';
+import AdminProfile   from '../pages/admin/Profile/AdminProfile';
 import PlaceholderPage from '../pages/PlaceholderPage';
 
 export default function AppRoutes() {
@@ -30,7 +31,7 @@ export default function AppRoutes() {
         <Route path="analytics" element={<Analytics />} />
         <Route path="blocked"   element={<Blocked />} />
         <Route path="settings"  element={<Settings />} />
-        <Route path="profile"   element={<PlaceholderPage title="Admin Profile" />} />
+        <Route path="profile"   element={<AdminProfile />} />
       </Route>
     </Routes>
   );
