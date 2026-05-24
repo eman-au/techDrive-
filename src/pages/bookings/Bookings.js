@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useSearch } from '../../context/SearchContext';
 import PageHeader from '../../components/common/PageHeader';
-import SearchBar from '../../components/common/SearchBar';
 import Badge from '../../components/common/Badge';
 import EmptyState from '../../components/common/EmptyState';
 import { mockBookings } from '../../data/mockData';
+import { Briefcase, Calendar, DollarSign, Clock, Shield } from 'lucide-react';
 import './Bookings.css';
 
 const statusMap = {
@@ -14,14 +15,15 @@ const statusMap = {
 };
 
 export default function Bookings() {
-  const [search, setSearch] = useState('');
+  const { search, setSearch } = useSearch();
   const [filter, setFilter] = useState('all');
 
   const filtered = mockBookings.filter(b => {
     const matchSearch =
       b.customer.toLowerCase().includes(search.toLowerCase()) ||
       b.provider.toLowerCase().includes(search.toLowerCase()) ||
-      b.service.toLowerCase().includes(search.toLowerCase());
+      b.service.toLowerCase().includes(search.toLowerCase()) ||
+      b.id.toLowerCase().includes(search.toLowerCase());
     const matchFilter = filter === 'all' || b.status === filter;
     return matchSearch && matchFilter;
   });
@@ -30,16 +32,16 @@ export default function Bookings() {
     <div className="bookings animate-fade">
       <PageHeader
         title="Active Bookings"
-        subtitle="Track and manage all service bookings."
+        subtitle="Real-time service tracking, client bookings, operational status toggles, and payout monitoring."
       />
 
-      <div className="providers__toolbar">
-        <SearchBar value={search} onChange={setSearch} placeholder="Search bookings..." />
-        <div className="providers__filters">
-          {['all','active','pending','completed','cancelled'].map(f => (
+      <div className="bookings__toolbar">
+        <div className="bookings__toolbar-left" />
+        <div className="bookings__filters">
+          {['all','active','completed','cancelled'].map(f => (
             <button
               key={f}
-              className={`filter-btn ${filter === f ? 'filter-btn--active' : ''}`}
+              className={`bookings-filter-btn ${filter === f ? 'bookings-filter-btn--active' : ''}`}
               onClick={() => setFilter(f)}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -48,36 +50,66 @@ export default function Bookings() {
         </div>
       </div>
 
-      <div className="table-card">
+      <div className="bookings-table-card">
         {filtered.length === 0 ? (
-          <EmptyState />
+          <EmptyState title="No Bookings Found" subtitle="Try adjusting your filter settings or searching a different term." />
         ) : (
-          <table className="data-table">
+          <table className="bookings-data-table">
             <thead>
               <tr>
-                <th>Booking ID</th>
-                <th>Customer</th>
-                <th>Provider</th>
-                <th>Service</th>
-                <th>Date & Time</th>
-                <th>Amount</th>
+                <th>Customer Name</th>
+                <th>Assigned Provider</th>
+                <th>Requested Service</th>
+                <th>Scheduled Date & Time</th>
+                <th>Total Amount</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map(b => (
-                <tr key={b.id}>
-                  <td><span className="booking-id">{b.id}</span></td>
-                  <td>{b.customer}</td>
-                  <td>{b.provider}</td>
-                  <td>{b.service}</td>
+                <tr key={b.id} className="booking-row-premium">
                   <td>
-                    <span>{b.date}</span>
-                    <br />
-                    <span className="text-muted text-sm">{b.time}</span>
+                    <div className="bookings-user-cell">
+                      <div className="bookings-user-avatar">
+                        {b.customer.charAt(0)}
+                      </div>
+                      <span className="bookings-user-name">{b.customer}</span>
+                    </div>
                   </td>
-                  <td><strong>Rs. {b.amount.toLocaleString()}</strong></td>
-                  <td><Badge label={b.status} type={statusMap[b.status]} /></td>
+                  <td>
+                    <div className="bookings-user-cell">
+                      <div className="bookings-provider-avatar">
+                        {b.provider.charAt(0)}
+                      </div>
+                      <span className="bookings-user-name">{b.provider}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="bookings-service-tag">
+                      <Briefcase size={11} />
+                      {b.service}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="bookings-datetime-cell">
+                      <span className="datetime-date">
+                        <Calendar size={11} />
+                        {b.date}
+                      </span>
+                      <span className="datetime-time">
+                        <Clock size={11} />
+                        {b.time}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="booking-amount-value">
+                      Rs. {b.amount.toLocaleString()}
+                    </span>
+                  </td>
+                  <td>
+                    <Badge label={b.status} type={statusMap[b.status]} />
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -1,37 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  LayoutDashboard, Users, Briefcase, ClipboardCheck, Clock,
-  MapPin, BookOpen, AlertCircle, Star, Tag, Bell,
-  BarChart2, ShieldOff, Settings, UserCircle, ChevronLeft,
-  ChevronRight, Zap
+  LayoutDashboard, Users, Briefcase, ClipboardCheck,
+  BookOpen, AlertCircle, BarChart2, HelpCircle, Zap
 } from 'lucide-react';
 import './Sidebar.css';
 
-const menuItems = [
-  { label: 'Dashboard',         icon: LayoutDashboard, path: '/' },
-  { label: 'Service Providers', icon: Briefcase,        path: '/providers' },
-  { label: 'Verification Tests',icon: ClipboardCheck,   path: '/verification' },
-  { label: 'Active Bookings',   icon: BookOpen,          path: '/bookings' },
-  { label: 'Complaints',        icon: AlertCircle,       path: '/complaints' },
-  { label: 'Categories',        icon: Tag,               path: '/categories' },
-  { label: 'Notifications',     icon: Bell,              path: '/notifications' },
-  { label: 'Reports & Analytics',icon: BarChart2,        path: '/analytics' },
-  { label: 'Blocked Accounts',  icon: ShieldOff,         path: '/blocked' },
-  { label: 'Settings',          icon: Settings,          path: '/settings' },
-  { label: 'Admin Profile',     icon: UserCircle,        path: '/profile' },
+const menuGroups = [
+  {
+    items: [
+      { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
+    ],
+  },
+  {
+    label: 'Operations',
+    items: [
+      { label: 'Bookings', icon: BookOpen, path: '/bookings' },
+      { label: 'Complaints', icon: AlertCircle, path: '/complaints' },
+    ],
+  },
+  {
+    label: 'People',
+    items: [
+      { label: 'User Management', icon: Users, path: '/users' },
+      { label: 'Service Providers', icon: Briefcase, path: '/providers' },
+      { label: 'Worker Verification', icon: ClipboardCheck, path: '/verification' },
+    ],
+  },
+  {
+    label: 'Content & Config',
+    items: [
+      { label: 'Quiz Questions', icon: HelpCircle, path: '/quiz-questions' },
+    ],
+  },
+  {
+    label: 'Insights',
+    items: [
+      { label: 'Reports & Analytics', icon: BarChart2, path: '/analytics' },
+    ],
+  },
 ];
 
 export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
   return (
     <>
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div className="sidebar-overlay" onClick={onMobileClose} />
       )}
 
       <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''} ${mobileOpen ? 'sidebar--mobile-open' : ''}`}>
-        {/* Logo */}
         <div className="sidebar__logo">
           <div className="sidebar__logo-icon">
             <Zap size={20} />
@@ -39,40 +56,57 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
           {!collapsed && (
             <span className="sidebar__logo-text">Tech Drive</span>
           )}
-          <button className="sidebar__toggle" onClick={onToggle}>
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+
+          <button
+            className="sidebar__toggle"
+            onClick={onToggle}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <span className="sidebar__toggle-icon">
+              {collapsed ? (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="1" y="3" width="9" height="1.5" rx="0.75" fill="currentColor"/>
+                  <rect x="1" y="7.25" width="9" height="1.5" rx="0.75" fill="currentColor"/>
+                  <rect x="1" y="11.5" width="9" height="1.5" rx="0.75" fill="currentColor"/>
+                  <path d="M12 5.5L14.5 8L12 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="6" y="3" width="9" height="1.5" rx="0.75" fill="currentColor"/>
+                  <rect x="6" y="7.25" width="9" height="1.5" rx="0.75" fill="currentColor"/>
+                  <rect x="6" y="11.5" width="9" height="1.5" rx="0.75" fill="currentColor"/>
+                  <path d="M4 5.5L1.5 8L4 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </span>
           </button>
         </div>
 
-        {/* Menu */}
         <nav className="sidebar__nav">
-          {menuItems.map(({ label, icon: Icon, path }) => (
-            <NavLink
-              key={path}
-              to={path}
-              end={path === '/'}
-              className={({ isActive }) =>
-                `sidebar__item ${isActive ? 'sidebar__item--active' : ''}`
-              }
-              title={collapsed ? label : ''}
-              onClick={onMobileClose}
-            >
-              <Icon size={18} className="sidebar__item-icon" />
-              {!collapsed && <span className="sidebar__item-label">{label}</span>}
-            </NavLink>
+          {menuGroups.map((group, groupIndex) => (
+            <div key={groupIndex} className="sidebar__group">
+              {group.label && !collapsed && (
+                <span className="sidebar__group-label">{group.label}</span>
+              )}
+              {group.items.map(({ label, icon: Icon, path }) => (
+                <NavLink
+                  key={path}
+                  to={path}
+                  end={path === '/'}
+                  className={({ isActive }) =>
+                    `sidebar__item ${isActive ? 'sidebar__item--active' : ''}`
+                  }
+                  title={collapsed ? label : ''}
+                  onClick={onMobileClose}
+                >
+                  <Icon size={18} className="sidebar__item-icon" />
+                  {!collapsed && <span className="sidebar__item-label">{label}</span>}
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
-
-        {/* Bottom user card */}
-        {!collapsed && (
-          <div className="sidebar__user">
-            <div className="sidebar__user-avatar">A</div>
-            <div>
-              <p className="sidebar__user-name">Admin User</p>
-              <p className="sidebar__user-role">Super Admin</p>
-            </div>
-          </div>
-        )}
       </aside>
     </>
   );

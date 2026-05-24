@@ -1,16 +1,17 @@
 import React, { useState, useMemo } from 'react';
+import './ComplaintsHistory.css';
 
 const MOCK_COMPLAINTS = [
-  { id: 'CMP-1042', title: 'Payment failed but amount deducted', category: 'Billing & Payments', priority: 'Urgent', status: 'Open', date: '2026-05-17' },
-  { id: 'CMP-1041', title: 'App crashes on checkout screen', category: 'Technical Issue', priority: 'High', status: 'In Progress', date: '2026-05-16' },
-  { id: 'CMP-1040', title: 'Rude behavior by delivery executive', category: 'Service Quality', priority: 'Medium', status: 'Resolved', date: '2026-05-15' },
-  { id: 'CMP-1039', title: 'Cannot reset password via email', category: 'Account Access', priority: 'High', status: 'Closed', date: '2026-05-14' },
-  { id: 'CMP-1038', title: 'Feature request: Dark mode', category: 'Product Feedback', priority: 'Low', status: 'Resolved', date: '2026-05-12' },
+  { email: 'user1@gmail.com', title: 'Payment failed but amount deducted', category: 'Billing & Payments', priority: 'Urgent', status: 'Open', date: '2026-05-17' },
+  { email: 'ahmad.khan@gmail.com', title: 'App crashes on checkout screen', category: 'Technical Issue', priority: 'High', status: 'In Progress', date: '2026-05-16' },
+  { email: 'sara.ali@gmail.com', title: 'Rude behavior by delivery executive', category: 'Service Quality', priority: 'Medium', status: 'Resolved', date: '2026-05-15' },
+  { email: 'test.user@gmail.com', title: 'Cannot reset password via email', category: 'Account Access', priority: 'High', status: 'Closed', date: '2026-05-14' },
+  { email: 'feedback@gmail.com', title: 'Feature request: Dark mode', category: 'Product Feedback', priority: 'Low', status: 'Resolved', date: '2026-05-12' },
 ];
 
 const FILTERS = ['All', 'Open', 'In Progress', 'Resolved', 'Closed'];
 
-const ComplaintHistory = () => {
+const ComplaintsHistory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
 
@@ -18,8 +19,10 @@ const ComplaintHistory = () => {
     return MOCK_COMPLAINTS.filter(item => {
       const matchesFilter = activeFilter === 'All' || item.status === activeFilter;
       const searchLower = searchTerm.toLowerCase();
-      const matchesSearch = item.title.toLowerCase().includes(searchLower) || 
-                            item.category.toLowerCase().includes(searchLower);
+      const matchesSearch =
+        item.title.toLowerCase().includes(searchLower) ||
+        item.category.toLowerCase().includes(searchLower) ||
+        item.email.toLowerCase().includes(searchLower);
       return matchesFilter && matchesSearch;
     });
   }, [searchTerm, activeFilter]);
@@ -41,34 +44,30 @@ const ComplaintHistory = () => {
 
   return (
     <div className="ch-card">
-      <div className="ch-header">
-        <div className="ch-header-left">
-          <div>
-            <h2 className="ch-title">Complaint History</h2>
-            <p className="ch-subtitle">Track and manage user submitted complaints</p>
-          </div>
+
+      {/* Filters + Search on one line */}
+      <div className="ch-filters-bar">
+        <div className="ch-filters">
+          {FILTERS.map(filter => (
+            <button
+              key={filter}
+              className={`ch-filter-btn ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {filter} <span className="ch-badge">{getCount(filter)}</span>
+            </button>
+          ))}
         </div>
+
         <div className="ch-search">
           <i className="ti ti-search"></i>
-          <input 
-            type="text" 
-            placeholder="Search by title or category..." 
+          <input
+            type="text"
+            placeholder="Search by title, category or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-      </div>
-
-      <div className="ch-filters">
-        {FILTERS.map(filter => (
-          <button 
-            key={filter} 
-            className={`ch-filter-btn ${activeFilter === filter ? 'active' : ''}`}
-            onClick={() => setActiveFilter(filter)}
-          >
-            {filter} <span className="ch-badge">{getCount(filter)}</span>
-          </button>
-        ))}
       </div>
 
       <div className="ch-table-container">
@@ -76,7 +75,7 @@ const ComplaintHistory = () => {
           <table className="ch-table animate-fade">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Email</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Priority</th>
@@ -86,11 +85,13 @@ const ComplaintHistory = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map(item => (
-                <tr key={item.id}>
-                  <td className="ch-col-id">{item.id}</td>
+              {filteredData.map((item, index) => (
+                <tr key={index}>
+                  <td className="ch-col-id">{item.email}</td>
                   <td className="ch-col-title">{item.title}</td>
-                  <td><span className="ch-category-pill">{item.category}</span></td>
+                  <td>
+                    <span className="ch-category-pill">{item.category}</span>
+                  </td>
                   <td>
                     <span className={`ch-priority-pill ch-priority-${item.priority.toLowerCase()}`}>
                       {item.priority}
@@ -119,7 +120,10 @@ const ComplaintHistory = () => {
             </div>
             <h3>No complaints found</h3>
             <p>We couldn't find any complaints matching your current filters and search term.</p>
-            <button className="ch-btn-clear-filters" onClick={() => { setSearchTerm(''); setActiveFilter('All'); }}>
+            <button
+              className="ch-btn-clear-filters"
+              onClick={() => { setSearchTerm(''); setActiveFilter('All'); }}
+            >
               Clear Filters
             </button>
           </div>
@@ -129,4 +133,4 @@ const ComplaintHistory = () => {
   );
 };
 
-export default ComplaintHistory;
+export default ComplaintsHistory;

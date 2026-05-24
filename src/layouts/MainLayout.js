@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
+import { SearchProvider } from '../context/SearchContext';
 import './MainLayout.css';
 
 export default function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    // Simulate auth state cleanup
+    localStorage.removeItem('user');
+    setShowLogoutModal(false);
+    // Display a sleek feedback and reload/redirect
+    alert("You have been successfully logged out!");
+    window.location.href = '/';
+  };
 
   return (
     <div className="main-layout">
@@ -15,20 +27,44 @@ export default function MainLayout() {
         onToggle={() => setCollapsed(prev => !prev)}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
+        onLogout={() => setShowLogoutModal(true)}
       />
 
-      <div
-        className={`main-layout__content ${collapsed ? 'main-layout__content--collapsed' : ''}`}
-      >
-        <Navbar
-          onMenuClick={() => setMobileOpen(prev => !prev)}
-          sidebarCollapsed={collapsed}
-        />
+      <SearchProvider>
+        <div
+          className={`main-layout__content ${collapsed ? 'main-layout__content--collapsed' : ''}`}
+        >
+          <Navbar
+            onMenuClick={() => setMobileOpen(prev => !prev)}
+            sidebarCollapsed={collapsed}
+            onLogout={() => setShowLogoutModal(true)}
+          />
 
-        <main className="main-layout__main">
-          <Outlet />
-        </main>
-      </div>
+          <main className="main-layout__main">
+            <Outlet />
+          </main>
+        </div>
+      </SearchProvider>
+
+      {showLogoutModal && (
+        <div className="logout-modal-overlay">
+          <div className="logout-modal">
+            <div className="logout-modal__icon">
+              <LogOut size={28} />
+            </div>
+            <h3 className="logout-modal__title">Confirm Logout</h3>
+            <p className="logout-modal__message">Are you sure you want to log out of the Tech Drive admin panel?</p>
+            <div className="logout-modal__actions">
+              <button className="logout-modal__btn logout-modal__btn--cancel" onClick={() => setShowLogoutModal(false)}>
+                Cancel
+              </button>
+              <button className="logout-modal__btn logout-modal__btn--confirm" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

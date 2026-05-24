@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import PageHeader from '../../components/common/PageHeader';
 import StatCard from '../../components/common/StatCard';
-import { TrendingUp, Users, Star, DollarSign } from 'lucide-react';
+import { TrendingUp, Users, Star } from 'lucide-react';
 import { weeklyBookings, providerGrowth, complaintTrend } from '../../data/mockData';
 import '../dashboard/Dashboard.css';
 
@@ -19,13 +19,13 @@ export default function Analytics() {
       />
 
       <div className="dashboard__stats">
-        <StatCard title="Total Bookings"    value="1,842" icon={TrendingUp} color="blue"   change={14} changeLabel="vs last month" />
-        <StatCard title="Total Providers"   value="186"   icon={Users}      color="cyan"   change={8}  changeLabel="vs last month" />
-        <StatCard title="Avg. Rating"       value="4.6"   icon={Star}       color="yellow" change={2}  changeLabel="avg rating" />
-        <StatCard title="Revenue Facilitated" value="₨ 2.4M" icon={DollarSign} color="green" change={22} changeLabel="total revenue" />
+        <StatCard title="Total Bookings"  value="1,842" icon={TrendingUp} color="blue"   change={14} changeLabel="vs last month" />
+        <StatCard title="Total Providers" value="186"   icon={Users}      color="cyan"   change={8}  changeLabel="vs last month" />
+        <StatCard title="Avg. Rating"     value="4.6"   icon={Star}       color="yellow" change={2}  changeLabel="avg rating" />
       </div>
 
       <div className="dashboard__charts">
+
         {/* Booking Volume Weekly */}
         <div className="chart-card">
           <div className="chart-card__header">
@@ -43,18 +43,12 @@ export default function Analytics() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="day" tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'var(--card-bg)', 
-                  borderColor: 'var(--border)', 
-                  borderRadius: '12px', 
-                  boxShadow: 'var(--shadow-lg)',
-                  color: 'var(--text-primary)'
-                }}
+              <Tooltip
+                contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-primary)' }}
                 itemStyle={{ color: 'var(--text-primary)' }}
                 labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
               />
-              <Area type="monotone" dataKey="bookings" fill="url(#bookGrad)" stroke="var(--primary)" strokeWidth={3} />
+              <Area type="monotone" dataKey="bookings" fill="url(#bookGrad)" stroke="var(--primary)" strokeWidth={3} dot={false} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -70,26 +64,21 @@ export default function Analytics() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'var(--card-bg)', 
-                  borderColor: 'var(--border)', 
-                  borderRadius: '12px', 
-                  boxShadow: 'var(--shadow-lg)',
-                  color: 'var(--text-primary)'
-                }}
+              <Tooltip
+                contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-primary)' }}
                 itemStyle={{ color: 'var(--text-primary)' }}
                 labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
               />
               <Legend wrapperStyle={{ paddingTop: '10px' }} />
-              <Line type="monotone" dataKey="electricians" stroke="var(--primary)" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, stroke: 'var(--card-bg)', fill: 'var(--primary)' }} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="plumbers"     stroke="var(--cyan)" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, stroke: 'var(--card-bg)', fill: 'var(--cyan)' }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="electricians" stroke="var(--primary)" strokeWidth={3} dot={false} activeDot={{ r: 5 }} />
+              <Line type="monotone" dataKey="plumbers"     stroke="var(--cyan)"    strokeWidth={3} dot={false} activeDot={{ r: 5 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
+
       </div>
 
-      {/* Complaints vs Resolutions (Redesigned with Premium Purple/Indigo Theme) */}
+      {/* Complaints vs Resolutions */}
       <div className="chart-card" style={{ marginTop: '24px' }}>
         <div className="chart-card__header">
           <h3 className="chart-card__title">Complaints vs Resolutions</h3>
@@ -100,14 +89,8 @@ export default function Analytics() {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'var(--card-bg)', 
-                borderColor: 'var(--border)', 
-                borderRadius: '12px', 
-                boxShadow: 'var(--shadow-lg)',
-                color: 'var(--text-primary)'
-              }}
+            <Tooltip
+              contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-primary)' }}
               itemStyle={{ color: 'var(--text-primary)' }}
               labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600 }}
             />
@@ -117,6 +100,7 @@ export default function Analytics() {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
     </div>
   );
 }

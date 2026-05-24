@@ -1,81 +1,126 @@
-import React from 'react';
-import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import React, { useState } from "react";
 import PageHeader from '../../components/common/PageHeader';
-import Badge from '../../components/common/Badge';
-import { mockProviders } from '../../data/mockData';
-import './Verification.css';
+import "./Verification.css";
+
+const workers = [
+  {
+    id: 1,
+    name: "Ali Khan",
+    role: "Electrician",
+    bestScore: 62,
+    status: "Pending",
+    attemptsData: [
+      { score: 45, result: "Failed" },
+      { score: 62, result: "Passed" },
+      { score: null, result: "Not Taken" },
+    ],
+    documents: {
+      cnic: "CNIC_FRONT.jpg",
+      certificate: "Electrician_CERT.pdf",
+    },
+  },
+  {
+    id: 2,
+    name: "Sara Ahmed",
+    role: "Plumber",
+    bestScore: 78,
+    status: "Pending",
+    attemptsData: [
+      { score: 78, result: "Passed" },
+      { score: null, result: "Not Taken" },
+      { score: null, result: "Not Taken" },
+    ],
+    documents: {
+      cnic: "CNIC_BACK.jpg",
+      certificate: "Plumbing_CERT.pdf",
+    },
+  },
+];
 
 export default function Verification() {
-  const applicants = mockProviders.filter(p => p.status !== 'approved');
+  const [data, setData] = useState(workers);
+  const [openId, setOpenId] = useState(null);
+
+  const handleAction = (id, action) => {
+    setData(data.map((w) => w.id === id ? { ...w, status: action } : w));
+  };
 
   return (
-    <div className="verification animate-fade">
+    <div className="verification-page animate-fade">
       <PageHeader
-        title="Verification Tests"
-        subtitle="Review applicant quiz scores and manage approvals."
+        title="Worker Verifications"
+        subtitle="Review applicant verification requests and documents."
       />
 
-      <div className="verification__grid">
-        {applicants.map(p => (
-          <div key={p.id} className={`verif-card verif-card--${p.status}`}>
-            <div className="verif-card__top">
-              <div className="provider-avatar">{p.name.charAt(0)}</div>
-              <div>
-                <h3 className="verif-card__name">{p.name}</h3>
-                <p className="verif-card__type">{p.type} · {p.city}</p>
-              </div>
-              <Badge
-                label={p.status}
-                type={p.status === 'blocked' ? 'danger' : 'warning'}
-              />
-            </div>
+      <div className="cards-grid">
+        {data.map((w) => (
+          <div key={w.id} className={`card ${openId === w.id ? 'card--expanded' : ''}`}>
 
-            {/* Score section */}
-            <div className="verif-card__score-section">
-              <div className="verif-score-item">
-                <span className="verif-score-label">Quiz Score</span>
-                <span className={`verif-score-value ${p.quizScore !== null ? (p.quizScore >= 70 ? 'pass' : 'fail') : ''}`}>
-                  {p.quizScore !== null ? `${p.quizScore}%` : 'Not taken'}
-                </span>
-              </div>
-              <div className="verif-score-item">
-                <span className="verif-score-label">Attempts</span>
-                <div className="attempt-dots">
-                  {[0,1,2].map(i => (
-                    <span key={i} className={`attempt-dot ${i < p.attempts ? 'attempt-dot--used' : ''}`} />
-                  ))}
-                  <span className="attempt-count">{p.attempts}/3</span>
+            {/* TOP */}
+            <div className="top">
+              <div className="user-info">
+                <div className="avatar">{w.name.charAt(0)}</div>
+                <div>
+                  <h3>{w.name}</h3>
+                  <div className="role">{w.role}</div>
                 </div>
               </div>
+              <span className={`badge ${w.status.toLowerCase()}`}>{w.status}</span>
             </div>
 
-            {/* Auto-blocked warning */}
-            {p.attempts >= 3 && (
-              <div className="verif-card__blocked-notice">
-                <AlertTriangle size={14} />
-                Auto-blocked: Exceeded maximum attempts
+            {/* MIDDLE */}
+            <div className="middle">
+              <div className="attempts">
+                <span className="label">Attempts</span>
+                <div className="dots">
+                  {w.attemptsData.map((a, i) => (
+                    <div
+                      key={i}
+                      className={`dot ${
+                        a.result === "Passed" ? "pass"
+                        : a.result === "Failed" ? "fail"
+                        : "empty"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="score-box">
+                <div className="score">{w.bestScore}%</div>
+                <div className="score-text">Best Score</div>
+              </div>
+            </div>
+
+            {/* ACTIONS */}
+            <div className="actions">
+              <button className="approve-btn" onClick={() => handleAction(w.id, "Approved")}>
+                Approve
+              </button>
+              <button className="reject-btn" onClick={() => handleAction(w.id, "Rejected")}>
+                Reject
+              </button>
+              <button className="view-btn" onClick={() => setOpenId(openId === w.id ? null : w.id)}>
+                {openId === w.id ? "Hide Docs" : "View Docs"}
+              </button>
+            </div>
+
+            {/* EXPANDED */}
+            {openId === w.id && (
+              <div className="expand">
+                <div className="docs">
+                  <div className="doc-card">
+                    <h5>CNIC</h5>
+                    <p>{w.documents.cnic}</p>
+                  </div>
+                  <div className="doc-card">
+                    <h5>Certificate</h5>
+                    <p>{w.documents.certificate}</p>
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* Actions */}
-            <div className="verif-card__actions">
-              {p.status !== 'blocked' && p.quizScore !== null && (
-                <>
-                  <button className="btn btn--success">
-                    <CheckCircle size={14} /> Approve
-                  </button>
-                  <button className="btn btn--danger">
-                    <XCircle size={14} /> Reject
-                  </button>
-                </>
-              )}
-              {p.status === 'blocked' && (
-                <button className="btn btn--outline">Unblock Account</button>
-              )}
-              {p.quizScore === null && p.status !== 'blocked' && (
-                <p className="verif-card__pending-text">Waiting for quiz attempt</p>
-              )}
-            </div>
           </div>
         ))}
       </div>
